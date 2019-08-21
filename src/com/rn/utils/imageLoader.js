@@ -1,22 +1,66 @@
 import Delegate from "../utils/Delegate";
 
 class imageLoader {
-    constructor(){
+    constructor(imageSet) {
         //events
         this.onStart = new Delegate();
+        this.onLoad = new Delegate();
         this.onProgress = new Delegate();
         this.onCompleted = new Delegate();
-
+        this.onError = new Delegate();
+        this.state = 'idle';
+        
+        // varriable list
         let _imageList = [];
-        let _completionList = [];        
+        let _completionList = [];
     }
 
-    setImageList(imgList){        
-        if(imgList instanceof Array){
+
+    loadImages(imgList) {
+        if (imgList instanceof Array) {
             _imageList = imgList;
-        }else{
+        } else {
             console.log(new Error("List type does not match.."))
         }
+
+        this.onLoad.add({ "beh": this._onLoad, scope: this });
+        this.onProgress.add({ "beh": this._onProgress, scope: this });
+        this.onCompleted.add({ "beh": this._onCompleted, scope: this });
+        this.onError.add({ "beh": this._onError, scope: this });
+        this.onStart.dispatch({});
+
+        this.initCachingImages();
+    }
+
+
+    initCachingImages() {
+        let imgLst = this._imageList;
+        imgLst.map(function (itmObj) {
+            let imgObj = {}
+            imgObj = new Image();
+            imgObj.src = itmObj;
+            imgObj.onload = _handleImageLoad;
+        })
+    }
+
+    _handleImageLoad(imgRef) {
+        this._completionList.push(imgRef);
+        this.state = "loaded";
+        this.onLoad.dispatch({});
+    }
+
+    _onLoad(objRef) {
+        if (this._imageList.length < this._completionList.length) {
+            this.state = "progress";
+            this.onProgress.dispatch({});
+        } else if (this._imageList.length === this._completionList.length) {
+            this.state = "completed";
+            this.onCompleted.dispatch({})
+        }
+    }
+
+    get _imageList() {
+        return this.imgList;
     }
 }
 
@@ -58,23 +102,23 @@ class imageLoader {
 //     }
 
 //     function _markImageCompletion(img) {
-        
+
 //         completionArray.push(img);
 //         imageTagList.push(img.path[0])
 //         _checkCompletion(completionArray.length);        
 //     }
 
 //     function _checkCompletion(compLength) {
-        
+
 //         var imgList = getImageList();
-        
+
 //         if (imgList.length == compLength) {
 //             callbackFunction();
 //         }
 //     }
 
 //     function _setCallbackFunction(callback) {
-        
+
 //         if (callback instanceof Function) {
 //             callbackFunction = callback;
 //         } else {
