@@ -1,6 +1,22 @@
-class imageLoader {
-    constructor(image){
+import Delegate from "../utils/Delegate";
 
+class imageLoader {
+    constructor(){
+        //events
+        this.onStart = new Delegate();
+        this.onProgress = new Delegate();
+        this.onCompleted = new Delegate();
+
+        let _imageList = [];
+        let _completionList = [];        
+    }
+
+    setImageList(imgList){        
+        if(imgList instanceof Array){
+            _imageList = imgList;
+        }else{
+            console.log(new Error("List type does not match.."))
+        }
     }
 }
 
