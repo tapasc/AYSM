@@ -1,144 +1,89 @@
-import Delegate from "../utils/Delegate";
+import Delegate from "./Delegate";
+import path from 'path';
 
-class imageLoader {
-    constructor(imageSet) {
-        //events
-        this.onStart = new Delegate();
-        this.onLoad = new Delegate();
-        this.onProgress = new Delegate();
-        this.onCompleted = new Delegate();
-        this.onError = new Delegate();
+export default class imageLoader {
+    constructor(configuration) {
+        //image asset data 
+        this.assetPath = configuration.imagePath
+        this._imageList = configuration.imagePool
+
+        //Events
+        this.onStartEvent = new Delegate();
+        this.onProgressEvent = new Delegate();
+        this.onCompleteEvent = new Delegate();
+        this.onErrorEvent = new Delegate();
+
+        //progress state
         this.state = 'idle';
-        
-        // varriable list
-        let _imageList = [];
-        let _completionList = [];
+
+        // variable list
+        this._totalImages = configuration.imagePool.length;
+        this._completedImages = 0;
+
+        //function bindings
+        //this._onLoad = this._onLoad.bind(this);
+
     }
 
 
-    loadImages(imgList) {
-        if (imgList instanceof Array) {
-            _imageList = imgList;
-        } else {
-            console.log(new Error("List type does not match.."))
+    loadImages() {
+        if (this.state != 'progress') {
+            this.initCachingImages();
         }
-
-        this.onLoad.add({ "beh": this._onLoad, scope: this });
-        this.onProgress.add({ "beh": this._onProgress, scope: this });
-        this.onCompleted.add({ "beh": this._onCompleted, scope: this });
-        this.onError.add({ "beh": this._onError, scope: this });
-        this.onStart.dispatch({});
-
-        this.initCachingImages();
     }
 
 
     initCachingImages() {
-        let imgLst = this._imageList;
-        imgLst.map(function (itmObj) {
+        const imgLst = this._imageList;
+        this.state = "start";
+        this.onStartEvent.dispatch({ "totalImages": this._totalImages, "loadedImages": this._completedImages });
+
+        imgLst.map((itmObj) => {
             let imgObj = {}
             imgObj = new Image();
-            imgObj.src = itmObj;
-            imgObj.onload = _handleImageLoad;
-        })
+            imgObj.src = path.join(__dirname, this.assetPath) + "/" + itmObj;
+            imgObj.onload = this._onLoad.bind(this);
+        });
     }
 
-    _handleImageLoad(imgRef) {
-        this._completionList.push(imgRef);
-        this.state = "loaded";
-        this.onLoad.dispatch({});
-    }
+    _onLoad(event) {
+        this._completedImages++;
 
-    _onLoad(objRef) {
-        if (this._imageList.length < this._completionList.length) {
+        if (parseInt(this._completedImages) < parseInt(this._totalImages)) {
             this.state = "progress";
-            this.onProgress.dispatch({});
-        } else if (this._imageList.length === this._completionList.length) {
+            this.onProgressEvent.dispatch({ "totalImages": this._totalImages, "loadedImages": this._completedImages });
+        } else if (parseInt(this._completedImages) === parseInt(this._totalImages)) {
             this.state = "completed";
-            this.onCompleted.dispatch({})
+            this.onCompleteEvent.dispatch({ "totalImages": this._totalImages, "loadedImages": this._completedImages });
         }
     }
 
-    get _imageList() {
+
+    get onStartEvt() {
+        return this.onStartEvent;
+    }
+
+    get onProgressEvt() {
+        return this.onProgressEvent;
+    }
+
+    get onCompleteEvt() {
+        return this.onCompleteEvent;
+    }
+
+    get onErrorEvt() {
+        return this.onErrorEvent;
+    }
+
+
+
+    get _getImageList() {
         return this.imgList;
     }
+    set _setImageList(qeue) {
+        this._imageList = qeue;
+    }
+    get _getState() {
+        return this.state;
+    }
 }
-
-// var imageLoader = (function (dom) {
-
-//     var dom = dom;
-//     var imageList = [];
-//     var imageTagList = [];
-//     var callbackFunction = null;
-//     var completionArray = [];
-
-//     function initializeData(imgSet, callback) {
-//         _setImageList(imgSet);
-//         _setCallbackFunction(callback);
-//         _initCache();
-//     }
-
-//     function _setImageList(imgSet) {
-
-//         if (imgSet instanceof Array) {
-//             imageList = imgSet;
-//         } else {
-//             console.warn("imageType should be an typeof [Array]..");
-//         }
-
-//     }
-
-//     function _initCache() {
-
-//         var imgList = getImageList();
-
-//         for (var i = 0; i < imageList.length; i++) {
-//             var Obj = {}
-//             Obj = new Image();
-//             Obj.src = imgList[i];
-//             Obj.onload = _markImageCompletion;
-
-//         }
-//     }
-
-//     function _markImageCompletion(img) {
-
-//         completionArray.push(img);
-//         imageTagList.push(img.path[0])
-//         _checkCompletion(completionArray.length);        
-//     }
-
-//     function _checkCompletion(compLength) {
-
-//         var imgList = getImageList();
-
-//         if (imgList.length == compLength) {
-//             callbackFunction();
-//         }
-//     }
-
-//     function _setCallbackFunction(callback) {
-
-//         if (callback instanceof Function) {
-//             callbackFunction = callback;
-//         } else {
-//             console.warn("callback should be an typeof [Function]..");
-//         }
-
-//     }
-
-//     function getImageList() {
-//         return imageList;
-//     }
-
-//     function getImageTagList() {
-//         return imageTagList
-//     }
-
-//     return {
-//         initialize: initializeData,
-//         getImageList: getImageList,
-//         getImageTagList: getImageTagList
-//     }
-
-// })(window)
