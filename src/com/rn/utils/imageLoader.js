@@ -51,7 +51,9 @@ export default class imageLoader {
 
         if (parseInt(this._completedImages) < parseInt(this._totalImages)) {
             this.state = "progress";
-            this.onProgressEvent.dispatch({ "totalImages": this._totalImages, "loadedImages": this._completedImages });
+            let percent = Math.ceil(this._completedImages/this._totalImages)*100;
+            console.log(percent);
+            this.onProgressEvent.dispatch({ "totalImages": this._totalImages, "loadedImages": this._completedImages, "percent": percent });
         } else if (parseInt(this._completedImages) === parseInt(this._totalImages)) {
             this.state = "completed";
             this.onCompleteEvent.dispatch({ "totalImages": this._totalImages, "loadedImages": this._completedImages });
