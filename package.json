@@ -4,7 +4,7 @@
   "description": "This is a html based game",
   "main": "app.js",
   "scripts": {
-    "build":"",
+    "build": "",
     "start": "npx webpack-dev-server --open --config ./config/build/webpackConfig/webpack.dev.config.js"
   },
   "author": "Tapas Chatterjee",
