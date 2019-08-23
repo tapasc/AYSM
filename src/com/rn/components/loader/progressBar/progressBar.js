@@ -1,21 +1,29 @@
-import './progressBar.less';
+import '../progressBar/progressBar.less';
+import Delegate from "../../../event/Delegate"
 
 export default class progressBar {
     constructor(Element) {
+        //@class Name
+        this.className = 'progressBar';
+
+        //@ Element to be inserted into
+        this.parentNode = Element;
+
+        //@ Element properties
         this.label = "progress-bar";
+        this.progressPercent = 0;
+
+        //@ Child elements
         this.progressElement = null;
         this.labelElement = null;
         this.fillBarElement = null;
 
-        this.parentElement = Element;
-        this.progressPercent = 0;
+        //@ Events
+        this.onCreateElement = new Delegate();
+        this.onDomInjected = new Delegate();
     }
-    createInstance() {
-        this.createElement().render();
-        return this;
-    }
-    createElement() {
 
+    createElement() {
         this.progressElement = document.createElement('div');
         this.progressElement.setAttribute("id", "progress");
         this.progressElement.classList.add("progressBar");
@@ -28,32 +36,38 @@ export default class progressBar {
         this.fillBarElement.classList.add("fillBar");
 
         this.labelElement = document.createElement('span');
-        this.labelElement.setAttribute("id","labelElement");
+        this.labelElement.setAttribute("id", "labelElement");
         this.labelElement.innerHTML = this.label;
 
         this.progressElement.appendChild(this.fillBarElement);
         this.progressElement.appendChild(this.labelElement);
-        return this;
+
     }
+
     render() {
-        this.parentElement.appendChild(this.progressElement);
+        let element = this.parentNode.appendChild(this.progressElement);
+
+        if (element instanceof HTMLElement) {
+            this.onDomInjected.dispatch();
+            console.log(this.onDomInjected);
+        } else {
+            throw new Error(`Element ${this.className} could not be created`);
+        }
+
     }
 
     update() {
-        let fill = this.parentElement.querySelector("#fillBarElement");
-            fill.style.width = this.progressPercent + "%";
-        let labelElm = this.parentElement.querySelector("#labelElement");
-            labelElm.innerHTML = this.label;
-
+        let fill = this.parentNode.querySelector("#fillBarElement");
+        fill.style.width = this.progressPercent + "%";
+        let labelElm = this.parentNode.querySelector("#labelElement");
+        labelElm.innerHTML = this.label;
     }
 
     set setProgress(percent) {
         this.progressPercent = percent;
         this.update();
     }
-    set setLabel(labelText) {
-        this.label = labelText;
-    }
+
     get getProgress() {
         return this.progressPercent;
     }

@@ -1,13 +1,13 @@
 export default class Delegate {
     constructor() {
         this._registeredEventList = [];
-        
-        // this.add = this.add.bind(this);        
-        // this.remove = this.remove.bind(this);        
-        // this.removeAll = this.removeAll.bind(this);        
+
+        this.add = this.add.bind(this);        
+        this.remove = this.remove.bind(this);        
+        this.removeAll = this.removeAll.bind(this);        
     }
 
-    add(evtObj) {       
+    add(evtObj) {
         this._registeredEventList.push(evtObj);
     }
     remove(fn) {
@@ -23,7 +23,7 @@ export default class Delegate {
     }
 
     dispatch(payload) {
-        this._registeredEventList.forEach((item) => {            
+        this._registeredEventList.forEach((item) => {
             item.beh.call(item.scope, payload);
         });
     }

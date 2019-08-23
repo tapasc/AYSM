@@ -1,7 +1,7 @@
 import '../css/styles.less';
 import mainTpl from '../views/test.hbs';
-import imgLoader from "./com/rn/utils/imageLoader";
-import progressBar from "./com/rn/ui/progressBar/progressBar"
+import imgLoader from "./com/rn/assetLoaders/imageLoader";
+import progressBar from "./com/rn/components/loader/progressBar/progressBar"
 
 
 
@@ -27,26 +27,26 @@ export default class Application {
 
 
         let elem = document.querySelector('.container');
-        let progressB = new progressBar(elem).createInstance();
-            
+        let progressB = new progressBar(elem);   
+            progressB.onDomInjected.add({"beh":(pl)=>{
+                console.log('progress bar injected inside root Node');
+            },"scope":this});
+            progressB.createElement();
+            progressB.render();             
+
 
 
         let imgLdr = new imgLoader(this.gameData.assets.image);        
-        imgLdr.onStartEvent.add({"beh":(pl)=>{
-            //console.log('loading started...'+pl.totalImages+"::"+pl.loadedImages);
+        // imgLdr.onStartEvent.add({"beh":(pl)=>{
+        //     //console.log('loading started...'+pl.totalImages+"::"+pl.loadedImages);
+        // },"scope":this});        
+        imgLdr.onProgressEvent.add({"beh":(payload)=>{            
+            progressB.setProgress = payload.percent;
+            progressB.setLabel = payload.percent+"%";
         },"scope":this});        
-        imgLdr.onProgressEvent.add({"beh":(pl)=>{
-            //console.log('loading in progress...'+pl.percent);
-            progressB.setProgress = pl.percent;
-            progressB.setLabel = pl.percent+"%";
-        },"scope":this});        
-        imgLdr.onCompleteEvent.add({"beh":(pl)=>{
-            //console.log('loading completed...'+pl.totalImages+"::"+pl.loadedImages);
+        imgLdr.onCompleteEvent.add({"beh":(payload)=>{            
         },"scope":this});
-        imgLdr.loadImages();              
-
-
-
+        imgLdr.loadImages();
     }
 
     get gameConfiguration() {
