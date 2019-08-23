@@ -41,18 +41,19 @@ export default class progressBar {
 
         this.progressElement.appendChild(this.fillBarElement);
         this.progressElement.appendChild(this.labelElement);
-
+        return this;
     }
 
     render() {
         let element = this.parentNode.appendChild(this.progressElement);
 
         if (element instanceof HTMLElement) {
-            this.onDomInjected.dispatch();
-            console.log(this.onDomInjected);
+            this.onDomInjected.dispatch();            
+            return this;
         } else {
             throw new Error(`Element ${this.className} could not be created`);
         }
+
 
     }
 

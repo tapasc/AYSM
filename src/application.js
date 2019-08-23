@@ -27,12 +27,12 @@ export default class Application {
 
 
         let elem = document.querySelector('.container');
+       
         let progressB = new progressBar(elem);   
             progressB.onDomInjected.add({"beh":(pl)=>{
                 console.log('progress bar injected inside root Node');
             },"scope":this});
-            progressB.createElement();
-            progressB.render();             
+            progressB.createElement().render();
 
 
 
