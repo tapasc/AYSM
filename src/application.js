@@ -2,7 +2,8 @@ import '../css/styles.less';
 import mainTpl from '../views/test.hbs';
 import imgLoader from "./com/rn/assetLoaders/imageLoader";
 import progressBar from "./com/rn/components/loader/progressBar/progressBar"
-
+import '@webcomponents/webcomponentsjs';
+import myComponent from './components/my-component';
 
 
 export default class Application {
@@ -27,13 +28,14 @@ export default class Application {
 
 
         let elem = document.querySelector('.container');
-       
+        // let myElement = document.createElement('my-component');
+
         let progressB = new progressBar(elem);   
             progressB.onDomInjected.add({"beh":(pl)=>{
                 console.log('progress bar injected inside root Node');
-            },"scope":this});
+            },"scope":this});            
             progressB.createElement().render();
-
+            // elem.appendChild(myElement);
 
 
         let imgLdr = new imgLoader(this.gameData.assets.image);        
@@ -43,6 +45,8 @@ export default class Application {
         imgLdr.onProgressEvent.add({"beh":(payload)=>{            
             progressB.setProgress = payload.percent;
             progressB.setLabel = payload.percent+"%";
+            let label = document.querySelector('my-component');
+                label.setAttribute("data-name",payload.percent);
         },"scope":this});        
         imgLdr.onCompleteEvent.add({"beh":(payload)=>{            
         },"scope":this});
