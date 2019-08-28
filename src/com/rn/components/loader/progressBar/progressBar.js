@@ -1,77 +1,124 @@
-import '../progressBar/progressBar.less';
-import Delegate from "../../../event/Delegate"
+import Delegate from '../../../event/Delegate';
+// import label from '../../ui/label/label'
 
-export default class progressBar {
-    constructor(Element) {
-        //@class Name
+// import './progressBar.less';
+export default class progressBar extends HTMLElement {
+    constructor() {
+        super();
+
+        //@Class Name
         this.className = 'progressBar';
 
-        //@ Element to be inserted into
-        this.parentNode = Element;
-
-        //@ Element properties
-        this.label = "progress-bar";
+        //@ Properties
+        this.label = "p-bar";
         this.progressPercent = 0;
 
         //@ Child elements
         this.progressElement = null;
         this.labelElement = null;
         this.fillBarElement = null;
-
         //@ Events
-        this.onCreateElement = new Delegate();
-        this.onDomInjected = new Delegate();
+        this.onStart = new Delegate();
+        this.onProgress = new Delegate();
+        this.onComplete = new Delegate();
+
+
+
+        //@progress bar style elements
+        this.progressBorderColor = "#911329"
+        this.fillColor = "#CC5D70";
+        this.progressTextColor = "#fff";
+
+
+        //@other component instances
+          this.label = null;  
+
+        this.template =
+            `
+            <style>
+                #GComponent-progressBar {
+                    width: 200px;
+                    height: 10px;
+                    border-radius: 5px;
+                    border: 2px solid ${this.progressBorderColor};
+                    text-align: center;
+                    position: relative;    
+                }            
+                #GComponent-progressBar-fillBarElement {
+                    background: ${this.fillColor};
+                    position: absolute;
+                    border-radius: 2px;
+                }
+                    
+                #GComponent-progressBar-label {
+                    position: absolute;
+                    left: 0px;
+                    top: 0px;
+                    width: 100%;
+                    font-size: 9px;
+                    color:${this.progressTextColor}
+                }            
+            </style>
+            <div id="GComponent-progressBar">
+                <div id="GComponent-progressBar-fillBarElement" style="width:0%;height:10px">
+                    <label-component id="GComponent-progressBar-label" data-label="Default"></label-component>
+                </div>
+             </div>`
+
+        this.root = this.attachShadow({ mode: 'open' });
+        //this._container = document.createElement('div');
+        this.createComponent();
+
+    }
+    static get observedAttributes() {
+        return ['data-progress-percent'];
     }
 
-    createElement() {
-        this.progressElement = document.createElement('div');
-        this.progressElement.setAttribute("id", "progress");
-        this.progressElement.classList.add("progressBar");
+    createComponent() {
+        this.root.innerHTML = this.template;
+        //this._container.innerHTML= this.template;
+        //this.appendChild(this._container);
+    }
+    connectedCallback() {
+        this.render();
+        this.onStart.dispatch({});
 
+    }
+    disconnectedCallback() {
 
-        this.fillBarElement = document.createElement('div');
-        this.fillBarElement.setAttribute("id", "fillBarElement");
-        this.fillBarElement.style.width = "0px;";
-        this.fillBarElement.style.height = "100%";
-        this.fillBarElement.classList.add("fillBar");
-
-        this.labelElement = document.createElement('span');
-        this.labelElement.setAttribute("id", "labelElement");
-        this.labelElement.innerHTML = this.label;
-
-        this.progressElement.appendChild(this.fillBarElement);
-        this.progressElement.appendChild(this.labelElement);
-        return this;
     }
 
-    render() {
-        let element = this.parentNode.appendChild(this.progressElement);
+    adoptedCallback() {
 
-        if (element instanceof HTMLElement) {
-            this.onDomInjected.dispatch();            
-            return this;
-        } else {
-            throw new Error(`Element ${this.className} could not be created`);
+    }
+
+    attributeChangedCallback(attrName, oldVal, newVal) {
+
+        if (oldVal !== newVal) {
+            this.progressPercent = parseInt(newVal);
+            this.render()
         }
 
-
     }
+    render() {
+        let fill = this.root.querySelector("#GComponent-progressBar-fillBarElement");
+            fill.style.width = this.progressPercent + "%";
+        let labelElm = this.root.querySelector("label-component");
+            labelElm.setAttribute('data-label',this.progressPercent);
 
-    update() {
-        let fill = this.parentNode.querySelector("#fillBarElement");
-        fill.style.width = this.progressPercent + "%";
-        let labelElm = this.parentNode.querySelector("#labelElement");
-        labelElm.innerHTML = this.label;
+        if (this.progressPercent < 100) {
+            this.onProgress.dispatch({ 'percent': this.progressPercent });
+        } else if (this.progressPercent >= 100) {
+            this.onComplete.dispatch({ 'percent': this.progressPercent });
+        }
     }
-
-    set setProgress(percent) {
-        this.progressPercent = percent;
-        this.update();
+    get getPercent() {
+        return this.getAttribute('data-progress-percent');
     }
-
-    get getProgress() {
-        return this.progressPercent;
+    set setPercent(newVal) {
+        this.setAttribute('data-progress-percent', newVal);
+        this.render();
     }
-
 
 }
+customElements.define('progress-bar', progressBar);

@@ -1,9 +1,11 @@
+import '@webcomponents/webcomponentsjs';
 import '../css/styles.less';
 import mainTpl from '../views/test.hbs';
 import imgLoader from "./com/rn/assetLoaders/imageLoader";
-import progressBar from "./com/rn/components/loader/progressBar/progressBar"
-import '@webcomponents/webcomponentsjs';
-import myComponent from './components/my-component';
+
+//@Components
+import progressBar from './com/rn/components/loader/progressBar/progressBar';
+import labelComponent from './com/rn/components/ui/label/label';
 
 
 export default class Application {
@@ -28,28 +30,26 @@ export default class Application {
 
 
         let elem = document.querySelector('.container');
+        let prog01 = document.querySelector('#p1').setAttribute('data-progress-percent',35);
+        let prog02 = document.querySelector('#p2').setAttribute('data-progress-percent',65);
+        let prog03 = document.querySelector('#p3').setAttribute('data-progress-percent',100);
         // let myElement = document.createElement('my-component');
 
-        let progressB = new progressBar(elem);   
-            progressB.onDomInjected.add({"beh":(pl)=>{
-                console.log('progress bar injected inside root Node');
-            },"scope":this});            
-            progressB.createElement().render();
-            // elem.appendChild(myElement);
-
-
-        let imgLdr = new imgLoader(this.gameData.assets.image);        
+      
+        let imgLdr = new imgLoader(this.gameData.assets.image);
         // imgLdr.onStartEvent.add({"beh":(pl)=>{
         //     //console.log('loading started...'+pl.totalImages+"::"+pl.loadedImages);
         // },"scope":this});        
-        imgLdr.onProgressEvent.add({"beh":(payload)=>{            
-            progressB.setProgress = payload.percent;
-            progressB.setLabel = payload.percent+"%";
-            let label = document.querySelector('my-component');
-                label.setAttribute("data-name",payload.percent);
-        },"scope":this});        
-        imgLdr.onCompleteEvent.add({"beh":(payload)=>{            
-        },"scope":this});
+        imgLdr.onProgressEvent.add({
+            "beh": (payload) => {
+                // let pb = document.querySelector('progress-bar');
+                // pb.setAttribute('data-progress-percent',payload.percent);                
+            }, "scope": this
+        });
+        imgLdr.onCompleteEvent.add({
+            "beh": (payload) => {
+            }, "scope": this
+        });
         imgLdr.loadImages();
     }
 
