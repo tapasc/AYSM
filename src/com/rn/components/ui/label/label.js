@@ -24,8 +24,11 @@ export default class label extends HTMLElement {
         this.labelColor = "#e2eb34"
 
 
+        //@styles passed through parameter
+        //TBD
 
-
+        
+        //@ internal template styles
         this.template =
             `
             <style>
@@ -36,7 +39,8 @@ export default class label extends HTMLElement {
             <div id="GComponent-label">                
                 <div id="GComponent-label-text">${this.label}</div>                
             </div>`
-
+        
+        //@ create the shado root for the element    
         this.root = this.attachShadow({ mode: 'open' });
         //this._container = document.createElement('div');
         this.createComponent();
