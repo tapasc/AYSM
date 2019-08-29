@@ -1,7 +1,11 @@
 import Delegate from '../../../event/Delegate';
+import {get} from 'axios';
+import assets from '../../../../../../config/gameData';
+import imgLoader from '../../../assetLoaders/imageLoader';
+import imageLoader from '../../../assetLoaders/imageLoader';
 
-//@ import other components
- import '../../loader/progressBar/progressBar'
+//@ import other components if required
+
 
 class assetLoaderView extends HTMLElement {
 
@@ -11,9 +15,12 @@ class assetLoaderView extends HTMLElement {
         //@ Class Name
         this.name = 'assetLoaderView';
 
-        
+        //@imageLoader instance
+        this.imgLoaderInstance = null;
+
         //@ component properties
-        this.loadingAssets = null;
+        this.loadingAssets = null;        
+        this.assetsList = assets;
         this.template = `
             <style>
             #component-assetLoaderView{
@@ -28,12 +35,12 @@ class assetLoaderView extends HTMLElement {
             }            
             </style>
             <div id="component-assetLoaderView">
-                <progress-bar data-progress-percent='35'></progress-bar>
+                <progress-bar data-progress-percent='0'></progress-bar>
             </div>
         `;
 
         //@ create shadow root
-        this.root = this.attachShadow({mode:'open'});
+        this.root = this.attachShadow({ mode: 'open' });
         this.createComponent();
     }
 
@@ -42,12 +49,13 @@ class assetLoaderView extends HTMLElement {
         return ['data-assets']
     }
 
-    createComponent() {        
+    createComponent() {
         this.root.innerHTML = this.template;
     }
 
     connectedCallback() {
-        this.renderComponent();        
+        this.renderComponent();
+        this.assignAssetLoadingEvents();
     }
 
     disconnectedCallback() {
@@ -59,7 +67,7 @@ class assetLoaderView extends HTMLElement {
     }
 
     attributeChangedCallback(name, oldValue, newValue) {
-        if(name==='data-assets'){
+        if (name === 'data-assets') {
             this.loadingAssets = JSON.stringify(newValue);
         }
     }
@@ -68,7 +76,21 @@ class assetLoaderView extends HTMLElement {
 
     }
 
+    assignAssetLoadingEvents(){
+       // console.log(this.assetsList.assets.image);
+        this.imgLoaderInstance = new imageLoader(this.assetsList.assets.image)
+        this.imgLoaderInstance.onProgressEvt.add({"beh":this._handleProgress,"scope":this});
+        this.imgLoaderInstance.onCompleteEvt.add({"beh":this._handleProgressComplete,"scope":this});
+    }
+
+    _handleProgress(payload){
+        console.log('--'+payload);
+    }
+
+    _handleProgressComplete(payload){
+        console.log('complete--'+payload);
+    }
 
 }
 
-customElements.define('loader-component',assetLoaderView)
+customElements.define('loader-component', assetLoaderView)

@@ -1,0 +1,168 @@
+let data ={
+	"version": 0.1,
+
+	"points" : {
+		"correct": [10, 30, 50],
+		"incorrect" : [0, -30, -100]
+	},
+
+	"randomizeQuestion":false,
+	"randomizeDistractor":false,
+	"quiz" : [
+		{
+			"id": 0,
+			"correctAnswer": "D,E",
+			"qustion" : "Which of the following is a type of depressive disorder? Select the 2 correct answers. Which of the following is a type of depressive disorder? Select the 2 correct answers. Which of the following is a type of depressive disorder? Select the 2 correct answers.",
+			"options" : [
+				{
+					"id":0,
+					"symbol": "A",
+					"content" : "Acute stress disorder"
+				},
+				{
+					"id":1,
+					"symbol": "B",
+					"content" : "Bulimia nervosa"
+				},
+				{
+					"id":2,
+					"symbol": "C",
+					"content" : "Hoarding disorder"
+				},
+				{
+					"id":3,
+					"symbol": "D",
+					"content" : "Major depressive disorder*"
+				},
+				{
+					"id":4,
+					"symbol": "E",
+					"content" : "Seasonal affective disorder*"
+				}				
+			],
+			"correct": "That’s correct!",
+			"incorrect": "That’s incorrect.",
+			"feedback": "Feed back text about why this answer is incorrect would appear here under the incorrect text Something probably kind of long and drawn out. Probably about a paragraph or two in length. Either way, we're gonna probably have to scroll this part. Feed back text about why this answer is incorrect would appear here under the incorrect text. Something probably kind of long and drawn out. Probably about a paragraph or two in length. Either way, we're gonna probably have to scroll this part."
+		},		
+		{
+			"id": 1,
+			"correctAnswer": "B",
+			"qustion" : "Symptoms of which of the following categories of mental disorders include loss of interest in activities once enjoyed, changes in appetite, trouble sleeping, loss of energy, or feeling worthless?",
+			"options" : [
+				{
+					"id":0,
+					"symbol": "A",
+					"content" : "Anxiety disorders"
+				},
+				{
+					"id":1,
+					"symbol": "B",
+					"content" : "Depressive disorders*"
+				},
+				{
+					"id":2,
+					"symbol": "C",
+					"content" : "Feeding and eating disorders"
+				},
+				{
+					"id":3,
+					"symbol": "D",
+					"content" : "Trauma- and stressor-related disorders"
+				}
+			],
+			"correct": "That’s correct!",
+			"incorrect": "That’s incorrect. ",
+			"feedback": "Feed back text about why this answer is incorrect would appear here under the incorrect text Something probably kind of long and drawn out. Probably about a paragraph or two in length. Either way, we're gonna probably have to scroll this part. Feed back text about why this answer is incorrect would appear here under the incorrect text. Something probably kind of long and drawn out. Probably about a paragraph or two in length. Either way, we're gonna probably have to scroll this part."
+		},		
+		{
+			"id": 2,
+			"correctAnswer": "A",
+			"qustion" : "Which of the following statements is part of the American Psychiatric Association (APA) definition of mental disorders?",
+			"options" : [
+				{
+					"id":0,
+					"symbol": "A",
+					"content" : "A syndrome characterized by clinically significant disturbance in an individual’s cognition, emotion regulation, or behavior.*"
+				},
+				{
+					"id":1,
+					"symbol": "B",
+					"content" : "An expectable or culturally approved response to the death of a loved one is considered a mental disorder."
+				},
+				{
+					"id":2,
+					"symbol": "C",
+					"content" : "Mental disorders are long-term disabilities that solely affect psychosocial functioning."
+				},
+				{
+					"id":3,
+					"symbol": "D",
+					"content" : "Mental disorders are usually associated with significant distress in some important activities, but not one’s underlying mental function."
+				}
+			],
+			"correct": "That’s correct!",
+			"incorrect": "That’s incorrect. ",
+			"feedback": "Feed back text about why this answer is incorrect would appear here under the incorrect text Something probably kind of long and drawn out. Probably about a paragraph or two in length. Either way, we're gonna probably have to scroll this part. Feed back text about why this answer is incorrect would appear here under the incorrect text. Something probably kind of long and drawn out. Probably about a paragraph or two in length. Either way, we're gonna probably have to scroll this part."
+		},		
+		{
+			"id": 3,
+			"correctAnswer": "B",
+			"qustion" : "The depressive symptoms associated with major depressive disorder must be present most of the day, nearly every day, for at least _____.",
+			"options" : [
+				{
+					"id":0,
+					"symbol": "A",
+					"content" : "1 week"
+				},
+				{
+					"id":1,
+					"symbol": "B",
+					"content" : "2 weeks*"
+				},
+				{
+					"id":2,
+					"symbol": "C",
+					"content" : "1 month"
+				},
+				{
+					"id":3,
+					"symbol": "D",
+					"content" : "2 months"
+				}
+			],
+			"correct": "That’s correct!",
+			"incorrect": "That’s incorrect.  ",
+			"feedback": "Feed back text about why this answer is incorrect would appear here under the incorrect text Something probably kind of long and drawn out. Probably about a paragraph or two in length. Either way, we're gonna probably have to scroll this part. Feed back text about why this answer is incorrect would appear here under the incorrect text. Something probably kind of long and drawn out. Probably about a paragraph or two in length. Either way, we're gonna probably have to scroll this part."
+		},		
+		{
+			"id": 4,
+			"correctAnswer": "A",
+			"qustion" : "Approximately how many American adults suffer from major depressive disorder?",
+			"options" : [
+				{
+					"id":0,
+					"symbol": "A",
+					"content" : "16 million*"
+				},
+				{
+					"id":1,
+					"symbol": "B",
+					"content" : "34 million"
+				},
+				{
+					"id":2,
+					"symbol": "C",
+					"content" : "65 million"
+				},
+				{
+					"id":3,
+					"symbol": "D",
+					"content" : "89 million"
+				}
+			],
+			"correct": "That’s correct!",
+			"incorrect": "That’s incorrect.  ",
+			"feedback": "Feed back text about why this answer is incorrect would appear here under the incorrect text Something probably kind of long and drawn out. Probably about a paragraph or two in length. Either way, we're gonna probably have to scroll this part. Feed back text about why this answer is incorrect would appear here under the incorrect text. Something probably kind of long and drawn out. Probably about a paragraph or two in length. Either way, we're gonna probably have to scroll this part."
+		} 																																																							
+	]
+}
